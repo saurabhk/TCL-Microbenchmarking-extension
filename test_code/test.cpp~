@@ -1,0 +1,141 @@
+#include <papi.h>
+#include <stdio.h>
+#define NUM_FLOPS 200000
+#define NUM_EVENTS 20
+
+int handle_error(int code, char *outstring)
+{
+  printf("Error in PAPI function call %s\n", outstring);
+  char errmesg[PAPI_MAX_STR_LEN];
+  PAPI_perror(code, errmesg, PAPI_MAX_STR_LEN);
+  printf("PAPI Error %i: %s\n", code, errmesg);
+  exit(1);
+}
+
+void dummy(void *array)
+{
+
+/* Confuse the compiler so as not to optimize
+   away the flops in the calling routine    */
+}
+
+volatile double a = 0.5, b = 2.2;
+
+void do_flops(int n)
+{
+   int i;
+   double c = 0.11;
+
+   for (i = 0; i < n; i++) {
+     c += a * b;
+   }
+   dummy((void *) &c);
+}
+
+main()
+{
+  /* the events listed below are all of the available 
+     events for a P4 using PAPI 3.0 */
+  int Events[NUM_EVENTS] = {PAPI_FP_OPS     ,  
+                            PAPI_TOT_CYC    ,
+                            PAPI_TOT_INS    ,
+                            PAPI_L2_DCM     ,
+                            PAPI_FP_INS     ,
+                            PAPI_BR_INS     ,
+                            PAPI_L2_LDM     ,
+                            PAPI_VEC_INS    ,
+                            PAPI_RES_STL    ,
+                            PAPI_TLB_DM     ,
+                            PAPI_TLB_IM     ,
+                            PAPI_TLB_TL     ,
+                            PAPI_BR_TKN     ,
+                            PAPI_BR_NTK     ,
+                            PAPI_BR_MSP     ,
+                            PAPI_BR_PRC     ,
+                            PAPI_L1_LDM     ,
+                            PAPI_L1_DCM     ,
+                            PAPI_L1_DCA };
+  long_long values[NUM_EVENTS];
+          
+  int code;
+  int nevents;
+  char in_string[80];
+
+  char event_name[PAPI_MAX_STR_LEN];
+  float rtime, ptime, mflips, mflops;
+  long_long flpins;
+
+  nevents = 4;
+  printf("\nTrying %i events\n", nevents);
+
+  /* Start counting events */
+
+  if ((code=PAPI_start_counters(Events, nevents)) != PAPI_OK)
+    handle_error(code, "start_counters");
+  
+  do_flops(NUM_FLOPS);
+  
+  /* Read the counters */
+  
+  if ((code=PAPI_read_counters(values, nevents)) != PAPI_OK)
+    handle_error(code, "read_counters");
+  
+  printf("After reading the counters:\n");
+  for(int j=0;j<nevents;j++)
+    {
+      PAPI_event_code_to_name(Events[j], event_name);
+      printf("Event %s -> %lld\n", event_name, values[j]);
+    }
+  
+  do_flops(NUM_FLOPS);
+  
+  /* Add the counters */
+  
+  if ((code=PAPI_accum_counters(values, nevents)) != PAPI_OK)
+    handle_error(code, "accum_counters");
+  
+  printf("After accumulating the counters:\n");
+  for(int j=0;j<nevents;j++)
+    {
+      PAPI_event_code_to_name(Events[j], event_name);
+      printf("Event %s -> %lld\n", event_name, values[j]);
+    }
+
+  do_flops(NUM_FLOPS);
+  
+  /* Stop counting events */
+  
+  if ((code=PAPI_stop_counters(values, nevents)) != PAPI_OK)
+    handle_error(code, "stop_counters");
+  
+  printf("After stopping the counters:\n");
+
+  for(int j=0;j<nevents;j++)
+    {
+      PAPI_event_code_to_name(Events[j], event_name);
+      printf("Event %s -> %lld\n", event_name, values[j]);
+    }
+
+  printf("\nTrying high-level PAPI_flops function\n");
+
+  flpins = -1;
+  if ((code=PAPI_flops(&rtime, &ptime, &flpins, &mflops)) != PAPI_OK)
+    handle_error(code, "PAPI_flops 1");
+
+  do_flops(NUM_FLOPS);
+      
+  if (PAPI_flops(&rtime, &ptime, &flpins, &mflops) != PAPI_OK)
+    handle_error(code, "PAPI_flops 2");
+
+  printf("First PAPI_flops:    %g %lld %g %g\n",mflops,flpins,rtime,ptime);
+      
+  do_flops(NUM_FLOPS);
+      
+  /* Add the counters */
+      
+  if ((code=PAPI_flops(&rtime, &ptime, &flpins, &mflops)) != PAPI_OK)
+    handle_error(code, "PAPI_flops 3");
+
+  printf("Second PAPI_flops:   %g %lld %g %g\n",mflops,flpins,rtime,ptime);
+      
+}

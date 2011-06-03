@@ -1,0 +1,2 @@
+g++ -shared -I/usr/bin/ActiveTcl-8.5/include tclfromc++.cpp -L/usr/bin/ActiveTcl-8.5/lib -ltclstub8.5
+

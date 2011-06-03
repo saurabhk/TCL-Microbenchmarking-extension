@@ -1,0 +1,239 @@
+#include <papi.h>
+#include<stdlib.h>
+#include <stdio.h>
+#include<iostream>
+using namespace std;
+#define NUM_FLOPS 1550000
+#define NUM_EVENTS 1
+int handle_error(int code, char *outstring)
+{
+  printf("Error in PAPI function call %s\n", outstring);
+  char errmesg[PAPI_MAX_STR_LEN];
+  PAPI_perror(code, errmesg, PAPI_MAX_STR_LEN);
+  printf("PAPI Error %i: %s\n", code, errmesg);
+  exit(1);
+}
+
+void dummy(void *array)
+{
+
+/* Confuse the compiler so as not to optimize
+   away the flops in the calling routine    */
+}
+
+volatile double a = 0.5, b = 2.2;
+
+void do_flops(int n)
+{
+   int i;
+   double c = 0.11;
+
+   for (i = 0; i < n; i++) {
+     c += a * b;
+   }
+   dummy((void *) &c);
+}
+
+
+int partition(int a[], int left, int right)
+{
+	int pivot = a[left];
+	while (true)
+	{
+		while (a[left] < pivot) left++;
+		while (a[right] > pivot) right--;
+		if (left < right)
+		{
+			swap(a[left], a[right]);
+		}
+		else
+		{
+			return right;
+		}
+	}
+}
+
+void quicksort(int a[], int left, int right)
+{
+	if (left < right)
+	{
+		int pivot = partition(a, left, right);
+		quicksort(a, left, pivot-1);
+		quicksort(a, pivot+1, right);
+	}
+}
+
+void printArray(int thearray[], int count)
+{
+	for (int i=0; i<count; ++i)
+	{
+		cout << thearray[i] << " ";
+	}
+	cout << endl;
+}
+
+long_long fib(int n)
+{
+if(n==0) return 1;
+if(n==1) return 1;
+return fib(n-1)+fib(n-2);
+}
+
+main()
+{
+/*
+int Events[NUM_EVENTS] = {PAPI_L1_ICM};
+long_long values[NUM_EVENTS];
+// Start counting events
+if (PAPI_start_counters(Events, NUM_EVENTS) != PAPI_OK)
+handle_error(1,"error");
+// Defined in tests/do_loops.c in the PAPI source distribution 
+do_flops(NUM_FLOPS);
+
+// Read the counters 
+if (PAPI_read_counters(values, NUM_EVENTS) != PAPI_OK)
+handle_error(1,"error");
+printf("After reading the counters: %lld\n",values[0]);
+do_flops(NUM_FLOPS);
+// Add the counters 
+if (PAPI_accum_counters(values, NUM_EVENTS) != PAPI_OK)
+handle_error(1,"error");
+printf("After adding the counters: %lld\n", values[0]);
+do_flops(NUM_FLOPS);
+// Stop counting events 
+if (PAPI_stop_counters(values, NUM_EVENTS) != PAPI_OK)
+handle_error(1,"error");
+printf("After stopping the counters: %lld\n", values[0]);
+const PAPI_hw_info_t *hwinfo = NULL;
+if (PAPI_library_init(PAPI_VER_CURRENT) != PAPI_VER_CURRENT)
+exit(1);
+if ((hwinfo = PAPI_get_hardware_info()) == NULL)
+exit(1);
+printf("%d CPU’s at %f Mhz.\n",hwinfo->totalcpus,hwinfo->mhz);
+*/
+
+ 
+
+
+  if (PAPI_library_init(PAPI_VER_CURRENT) != PAPI_VER_CURRENT) 
+  {
+     cout<<"Error initializing the PAPI Library";
+  exit(1);
+  }
+  // create the eventset
+  int event_set = PAPI_NULL;
+  
+  if (PAPI_create_eventset(&event_set) != PAPI_OK) {
+     cout<<"Error in subroutine PAPIF_create_eventset";
+	exit(1);
+}
+
+int evcs[2]={PAPI_L1_DCM,PAPI_BR_INS};
+
+   if (	PAPI_add_events(event_set, evcs,2) != PAPI_OK) {
+     cout<<"Abort After PAPIF_add_events:3 ";
+	exit(1);
+}
+
+
+ // start counting 
+
+  if(PAPI_start(event_set)!= PAPI_OK) {
+  cout<<"Abort After PAPIF_start: ";
+	exit(1);
+	}
+/*
+  do i=1,N
+  do j=1,N
+     z(i,j) = x(i,j)**y(i,j) + x(i+j/N, j) * y(i+j/N, j)
+  end do
+  end do
+*/
+
+int numbers1[] = {14, 17, 11, 13, 19, 16, 12, 15, 18, 10};
+int numbers2[] = {19, 16, 10, 12, 14, 17, 13, 18, 15, 11};
+int numbers3[] = {10, 11, 12, 13, 14, 15, 16, 17, 18, 19};
+int numbers4[] = {19, 18, 17, 16, 15, 14, 13, 12, 11, 10};
+quicksort(numbers1, 0, 9);
+printArray(numbers1, 10);
+quicksort(numbers2, 0, 9);
+printArray(numbers2, 10);
+quicksort(numbers3, 0, 9);
+printArray(numbers3, 10);
+quicksort(numbers4, 0, 9);
+printArray(numbers4, 10);
+
+ //stop counting
+ long_long values[2];
+values[1]=0;
+values[0]=0;
+
+  if (PAPI_stop(event_set, values)!= PAPI_OK) {
+  cout<<"Abort After PAPIF_stop: ";
+	exit(1);
+	}
+
+  // store the number of cache misses for Loop 1
+  long_long cm_loop1 = values[0];
+  long_long mem_loop1 = values[1];
+
+cout<<"data misses:"<<cm_loop1;
+cout<<"\ninstruction misses:"<<mem_loop1<<"\n";
+//Now reset the counters so they can be reused.
+
+  // reset the PAPI counters
+
+   if (PAPI_reset(event_set)!= PAPI_OK) {
+  cout<<"Abort After PAPIF_reset: ";
+	exit(1);
+	}
+
+ // start counting 
+
+  if(PAPI_start(event_set)!= PAPI_OK) {
+  cout<<"Abort After PAPIF_start: ";
+	exit(1);
+	}
+/*
+  do i=1,N
+  do j=1,N
+     z(i,j) = x(i,j)**y(i,j) + x(i+j/N, j) * y(i+j/N, j)
+  end do
+  end do
+*/
+
+quicksort(numbers1, 0, 9);
+printArray(numbers1, 10);
+quicksort(numbers2, 0, 9);
+printArray(numbers2, 10);
+quicksort(numbers3, 0, 9);
+printArray(numbers3, 10);
+quicksort(numbers4, 0, 9);
+printArray(numbers4, 10);
+
+long_long a=1;
+for(int i=1;i<=20;i++)
+a*=i;
+cout<<"\nfactorial:"<<a<<"\n";
+cout<<"\nfibonacci:"<<fib(30)<<"\n";
+cout<<"\nfibonacci:"<<fib(30)<<"\n";
+
+ //stop counting
+ 
+values[1]=0;
+values[0]=0;
+
+  if (PAPI_stop(event_set, values)!= PAPI_OK) {
+  cout<<"Abort After PAPIF_stop: ";
+	exit(1);
+	}
+
+  // store the number of cache misses for Loop 1
+  long_long cm_loop2 = values[0];
+  long_long mem_loop2 = values[1];
+
+cout<<"data misses:"<<cm_loop2;
+cout<<"\ninstruction misses:"<<mem_loop2<<"\n";
+
+}
+

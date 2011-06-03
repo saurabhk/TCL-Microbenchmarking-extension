@@ -1,0 +1,58 @@
+proc menu_clicked { no opt } {
+	tk_messageBox -message \
+		"You have clicked $opt.\nThis function is not implanted yet."
+}
+
+#Declare that there is a menu
+menu .mbar
+. config -menu .mbar
+
+#The Main Buttons
+.mbar add cascade -label "File" -underline 0 \
+      -menu [menu .mbar.file -tearoff 0]
+.mbar add cascade -label "Others" \
+      -underline 0 -menu [menu .mbar.oth -tearoff 1]
+.mbar add cascade -label "Help" -underline 0 \
+      -menu [menu .mbar.help -tearoff 0]
+
+## File Menu ##
+set m .mbar.file
+$m add command -label "New" -underline 0 \
+	  -command { .txt delete 1.0 end } ;# A new item called New is added.
+$m add checkbutton -label "Open" -underline 0 -command { menu_clicked 1 "Open" }
+$m add command -label "Save" -underline 0 -command { menu_clicked 1 "Save" }
+$m add separator
+$m add command -label "Exit" -underline 1 -command exit
+
+## Others Menu ##
+set m .mbar.oth
+$m add cascade -label "Insert" -underline 0 -menu [menu $m.mnu -title "Insert"] 
+  $m.mnu add command -label "Name" \
+       -command { .txt insert end "Name : Binny V A\n"}
+  $m.mnu add command -label "Website" -command { \
+     .txt insert end "Website: http://www.bin-co.com/\n"}
+  $m.mnu add command -label "Email" \
+	   -command { .txt insert end "E-Mail : binnyva@hotmail.com\n"}
+$m add command -label "Insert All" -underline 7 \
+	-command { .txt insert end {Name : Binny V A
+	  Website : http://www.bin-co.com/
+	  E-Mail : binnyva@hotmail.com}
+	  }
+
+## Help ##
+set m .mbar.help
+$m add command -label "About" -command { 
+	.txt delete 1.0 end
+	.txt insert end {
+	About
+	----------
+	This script created to make a menu for a tcl/tk tutorial.
+	Made by Binny V A
+	Website : http://www.bin-co.com/
+	E-Mail : binnyva@hotmail.com
+	}
+	}
+
+#Making a text area
+text .txt -width 50
+pack .txt
