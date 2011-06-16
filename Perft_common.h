@@ -7,7 +7,7 @@
 #include <papi.h>
 #include<string.h>
 #include<stdio.h>
-
+#include<stdint.h>
 
 #define PAPI_MAX_EVENTS 200
 #define PAPI_MAX_STRING_LENGTH 500
@@ -15,9 +15,11 @@
 struct papiState_t {
     int eventSet;
     int numberOfEvents;
-    long_long counterValues[PAPI_MAX_EVENTS];
+    int64_t counterValues[PAPI_MAX_EVENTS];
     char**eventsData;
-} papiState;
+} 
+papiState={0};
+
 
 /*
  * Perft_init.cpp

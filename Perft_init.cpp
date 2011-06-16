@@ -24,8 +24,9 @@ InitCmd(ClientData cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
     if(objc!=2) {
         fprintf(stderr,"Usage: perft::init listOfEvents");
         exit(1);
-    }    
-    papiState.eventsData=AllocateStringArray(3*PAPI_MAX_EVENTS,PAPI_MAX_STRING_LENGTH);
+    }
+
+
     int retval,eventCode;
     char* arg=Tcl_GetString(objv[1]);
     int argc, eventList;
@@ -33,6 +34,10 @@ InitCmd(ClientData cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
     eventList= Tcl_SplitList(interp, arg, &argc,  &argv);
     char **index=(char **)argv;   
     
+    if(papiState.eventsData==NULL) {
+        papiState.eventsData=AllocateStringArray(3*argc,PAPI_MAX_STRING_LENGTH);
+    }
+        
     papiState.eventSet=PAPI_NULL;
     papiState.numberOfEvents=0;
     
@@ -52,7 +57,7 @@ InitCmd(ClientData cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
         HandlePapiError(retval);
     }
     
-    while(*index!=NULL) {
+    while(papiState.numberOfEvents<argc) {
             retval=PAPI_event_name_to_code(*index,&eventCode);
             if ( retval!= PAPI_OK) {
                 printf("Error in getting information about event name: %s\n",*index);
