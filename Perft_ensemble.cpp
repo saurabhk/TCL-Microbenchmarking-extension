@@ -56,6 +56,7 @@
     Tcl_CreateObjCommand(interp, "perft::run_file", RunFileCmd, NULL, NULL);
     Tcl_CreateObjCommand(interp, "perft::run_script", RunScriptCmd, NULL, NULL);
     Tcl_CreateObjCommand(interp, "perft::select_events", SelectEventsCmd, NULL, NULL);
+    Tcl_CreateObjCommand(interp, "perft::counters", HwInfoCmd, NULL, NULL);    
 
     /*
      * create the ensemble

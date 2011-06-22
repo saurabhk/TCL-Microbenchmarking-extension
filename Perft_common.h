@@ -63,6 +63,13 @@ int
 RunScriptCmd(ClientData cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
 
 /*
+ * Perft_general.cpp
+ */
+
+int 
+HwInfoCmd(ClientData cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[]);
+
+/*
  * Perft_papi.cpp
  */
  
@@ -83,6 +90,9 @@ StartCounting();
 
 void
 StopCounting();
+
+void
+AccumCounting();
 
 /*
  * Perft_others.cpp

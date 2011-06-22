@@ -21,10 +21,24 @@ RunScriptCmd(ClientData cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const objv
 int 
 RunScriptCmd(ClientData cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
-    if(objc!=2) {
+    int doAccumulate=0;
+    if(objc<2) {
         fprintf(stderr,"Usage: perft::run_script script");
         exit(1);
     }        
+    
+    if(objc>=3) {
+        char* flag=Tcl_GetString(objv[2]);        
+        if(!strcmp("-a",flag))
+            doAccumulate=1;
+    }
+    
+    if(papiState.numberOfEvents<=0){
+        fprintf(stderr,"First use perft::init/perft::select_events to set the eventset\n");
+        exit(1);
+    }        
+            
+    
     char* arg=Tcl_GetString(objv[1]);
     int counter=0,retval;
     char*result;
@@ -38,7 +52,10 @@ RunScriptCmd(ClientData cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const objv
     }
 
     
-    StopCounting();
+    if(doAccumulate==0)
+        StopCounting();
+    else
+        AccumCounting(); 
     
     while(counter<papiState.numberOfEvents) {
         sprintf(papiState.eventsData[3*counter+1],"%lld",papiState.counterValues[counter]);

@@ -25,6 +25,9 @@ StartCounting();
 void
 StopCounting();
 
+void
+AccumCounting();
+
 /*
  *______________________________________________
  *
@@ -185,7 +188,7 @@ StartCounting()
 {
     int retval=PAPI_start(papiState.eventSet);
     if(retval!= PAPI_OK) {
-    printf("Abort After PAPIF_start: ");
+    printf("Abort After PAPI_start: ");
     HandlePapiError(retval);
     }
 }    
@@ -208,9 +211,37 @@ StopCounting()
 {
     int retval=PAPI_stop(papiState.eventSet,papiState.counterValues);
     if(retval!= PAPI_OK) {
-    printf("Abort After PAPIF_stop: ");
+    printf("Abort After PAPI_stop: ");
     HandlePapiError(retval);
     }
 }
 
+/*
+ *______________________________________________
+ *
+ * AccumCounting --
+ *
+ * This function stops the hardware events' counting. 
+ * It will print error message in case of failure and handles
+ * the error. It accummulates the counter results in 
+ *papiState.counterValues.
+ *
+ * Results:
+ * Hardware counters stop counting
+ *________________________________________________
+ */
+void
+AccumCounting()
+{
+    int retval=PAPI_accum(papiState.eventSet,papiState.counterValues);
+    if(retval!= PAPI_OK) {
+    printf("Abort After PAPI_accum: ");
+    HandlePapiError(retval);
+    }
+    retval=PAPI_stop(papiState.eventSet,NULL);
+    if(retval!= PAPI_OK) {
+    printf("Abort After PAPI_stop: ");
+    HandlePapiError(retval);
+    }
+}
 

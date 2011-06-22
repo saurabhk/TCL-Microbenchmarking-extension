@@ -15,8 +15,8 @@ TCLLIB:=-ltclstub8.5
 all: libperft
 
 ### link rule
-libperft: papif Perft_common.h list others init runfile runscript selectevents
-	@g++ ./build/papif ./build/list ./build/others ./build/init ./build/runfile ./build/runscript ./build/selectevents -shared -o ./build/libperft.so $(CXXFLAGS) Perft_ensemble.cpp $(LDFLAGS) $(TCLLIB) -lpapi
+libperft: papif Perft_common.h list others init runfile runscript selectevents general
+	@g++ ./build/papif ./build/list ./build/others ./build/init ./build/runfile ./build/runscript ./build/selectevents ./build/general -shared -o ./build/libperft.so $(CXXFLAGS) Perft_ensemble.cpp $(LDFLAGS) $(TCLLIB) -lpapi
 
 run: libperft
 	@rlwrap /usr/bin/ActiveTcl-8.5/bin/tclsh
@@ -35,6 +35,9 @@ list: Perft_common.h papif others
 
 init: Perft_common.h papif others
 	@g++ $(CXXFLAGS) ./build/papif ./build/others -shared -o ./build/init Perft_init.cpp
+	
+general: Perft_common.h Perft_general.cpp
+	@g++ $(CXXFLAGS) ./build/papif ./build/others -shared -o ./build/general Perft_general.cpp
 
 papif: Perft_common.h others
 	@g++ $(CXXFLAGS) -shared -o  ./build/papif ./build/others -lpapi Perft_papi.cpp
