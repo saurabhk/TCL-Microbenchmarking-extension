@@ -23,13 +23,14 @@ int
 ListEventsCmd(ClientData cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
     InitPapi();
-    char **data=AllocateStringArray(2*PAPI_MAX_EVENTS,PAPI_MAX_STRING_LENGTH);
+    char **data;
+    AllocateStringArray(2*PAPI_MAX_EVENTS,PAPI_MAX_STRING_LENGTH,&data);
     int counter=0;
     int retval,currentEvent=(PAPI_PRESET_MASK|0);
     PAPI_event_info_t  info;
 
     /*
-      * Scan for all supported native events on this platform 
+      * Scan for all supported events on this platform 
       */
 
     do
@@ -47,7 +48,7 @@ ListEventsCmd(ClientData cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const obj
 
 
     char*eventList=Tcl_Merge(counter, (const char *const *)data);
-    DeallocateStringArray(240,data);
+    DeallocateStringArray(2*PAPI_MAX_EVENTS,&data);
     Tcl_SetResult(interp,eventList,TCL_DYNAMIC);
 	 
     return TCL_OK;

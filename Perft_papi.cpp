@@ -209,7 +209,7 @@ StartCounting()
 void
 StopCounting()
 {
-    int retval=PAPI_stop(papiState.eventSet,papiState.counterValues);
+    int retval=PAPI_stop(papiState.eventSet,(long_long*)papiState.counterValues);
     if(retval!= PAPI_OK) {
     printf("Abort After PAPI_stop: ");
     HandlePapiError(retval);
@@ -233,7 +233,7 @@ StopCounting()
 void
 AccumCounting()
 {
-    int retval=PAPI_accum(papiState.eventSet,papiState.counterValues);
+    int retval=PAPI_accum(papiState.eventSet,(long_long*)papiState.counterValues);
     if(retval!= PAPI_OK) {
     printf("Abort After PAPI_accum: ");
     HandlePapiError(retval);

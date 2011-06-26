@@ -77,7 +77,7 @@ RunScriptCmd(ClientData cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const objv
         counter++;
 	}
 
-    Tcl_SetObjResult(interp,result);
+    Tcl_SetResult(interp,result,TCL_DYNAMIC);
     return TCL_OK;        
 }    
 

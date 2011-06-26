@@ -35,9 +35,9 @@ InitCmd(ClientData cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
     char **index=(char **)argv;   
     
     if(papiState.eventsData==NULL) {
-        papiState.eventsData=AllocateStringArray(3*argc,PAPI_MAX_STRING_LENGTH);
-    }
-        
+        AllocateStringArray(PAPI_MAX_EVENTS,PAPI_MAX_STRING_LENGTH,&papiState.eventsData);
+    } 
+      
     papiState.eventSet=PAPI_NULL;
     papiState.numberOfEvents=0;
     
@@ -58,17 +58,17 @@ InitCmd(ClientData cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
     }
     
     while(papiState.numberOfEvents<argc) {
-            retval=PAPI_event_name_to_code(*index,&eventCode);
-            if ( retval!= PAPI_OK) {
-                printf("Error in getting information about event name: %s\n",*index);
-                HandlePapiError(retval);
-            }
-            papiState.eventsData[papiState.numberOfEvents*3]=*index;
-            retval=PAPI_add_event(papiState.eventSet, eventCode);
-            if(retval!=PAPI_OK) {
-                    printf("Error in adding event: %s\n",*index);
-                    HandlePapiError(retval);
-             }
+        retval=PAPI_event_name_to_code(*index,&eventCode);
+        if ( retval!= PAPI_OK) {
+            printf("Error in getting information about event name: %s\n",*index);
+            HandlePapiError(retval);
+        }
+        papiState.eventsData[papiState.numberOfEvents]=*index;
+        retval=PAPI_add_event(papiState.eventSet, eventCode);
+        if(retval!=PAPI_OK) {
+            printf("Error in adding event: %s\n",*index);
+            HandlePapiError(retval);
+        }
         index+=1;
         papiState.numberOfEvents+=1;
     }

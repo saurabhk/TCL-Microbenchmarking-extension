@@ -24,14 +24,12 @@ DeallocateStringArray(int noOfStrings,char**memPtr);
  *________________________________________________
  */
 char** 
-AllocateStringArray(int noOfStrings,int size)
+AllocateStringArray(int noOfStrings,int size,char*** memPtr)
 {
-    char**memPtr;
-    memPtr = (char**)malloc(noOfStrings * sizeof(char*));
+    *memPtr = (char**)malloc(noOfStrings * sizeof(char*));
     for (int  i = 0; i < noOfStrings; i++) {
-        memPtr[i] =(char *) malloc(size* sizeof(char));
+        (*memPtr)[i] =(char *) malloc(size* sizeof(char));
    }
-   return memPtr;
 }
 
  /*
@@ -48,10 +46,10 @@ AllocateStringArray(int noOfStrings,int size)
  *________________________________________________
  */
 void
-DeallocateStringArray(int noOfStrings,char**memPtr)
+DeallocateStringArray(int noOfStrings,char***memPtr)
 {
     for (int  i = 0; i < noOfStrings; i++) {
-        free(memPtr[i]);
+        free((*memPtr)[i]);
      }
-     free(memPtr);
+     free(*memPtr);
 }
