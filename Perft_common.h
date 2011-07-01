@@ -80,22 +80,22 @@ HwInfoCmd(ClientData cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 void
 HandlePapiError(int errcode);
 
-void
+int
 InitPapi() ;
 
-void
+int
 ResetEventSet();
 
-void
+int
 InitPapiMultiplexing();
 
-void
+int
 StartCounting();
 
-void
+int
 StopCounting();
 
-void
+int
 AccumCounting();
 
 /*

@@ -22,11 +22,15 @@ ListEventsCmd(ClientData cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const obj
 int 
 ListEventsCmd(ClientData cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
 {
-    InitPapi();
+    int retval;
+    retval=InitPapi();
+    if(retval==1) {
+        return 1;
+    }    
     char **data;
     AllocateStringArray(2*PAPI_MAX_EVENTS,PAPI_MAX_STRING_LENGTH,&data);
     int counter=0;
-    int retval,currentEvent=(PAPI_PRESET_MASK|0);
+    int currentEvent=(PAPI_PRESET_MASK|0);
     PAPI_event_info_t  info;
 
     /*
@@ -42,6 +46,7 @@ ListEventsCmd(ClientData cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const obj
         } else {
             printf("Error getting information about ");
             HandlePapiError(retval);
+            return 1;
         }
         counter+=2;
     } while (PAPI_enum_event(&currentEvent, 10) == PAPI_OK);

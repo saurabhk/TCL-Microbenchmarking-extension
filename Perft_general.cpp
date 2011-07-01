@@ -24,7 +24,8 @@ HwInfoCmd(ClientData cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const objv[])
     int noOfCounters=PAPI_num_counters();
     if(noOfCounters<0) {
         printf("Error in getting information about hardware counters: \n");
-        HandlePapiError(noOfCounters);        
+        HandlePapiError(noOfCounters);  
+        return 0;      
     }
     sprintf(counters,"%d",noOfCounters);
     strcat(result,counters);

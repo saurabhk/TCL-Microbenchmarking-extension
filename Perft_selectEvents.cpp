@@ -27,7 +27,7 @@ SelectEventsCmd(ClientData cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const o
     int retval=Tcl_EvalFile(interp, "./lib/widget.tcl");
     if(retval) {
         printf("Error running the widget\n");
-        exit(1);
+        return 1;
     }
     Tcl_SetObjResult(interp, Tcl_NewStringObj("success!", -1));
     return TCL_OK;

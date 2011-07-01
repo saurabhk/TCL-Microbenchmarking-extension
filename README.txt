@@ -20,6 +20,9 @@ IV) run
 	2) else tclsh8.5
 	3) load build/libperft.so
 	4) Start instrumenting!
+	
+V) test
+    make test	
 
 You may need to modify LD_LIBRARY_PATH to include the location of libpapi.so
 

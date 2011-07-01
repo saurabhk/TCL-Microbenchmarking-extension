@@ -21,8 +21,6 @@
  * Moreover it declares/creates all the commands and 
  * then create an ensemble.
  *
- * Results:
- * The program is exited.
  *________________________________________________
  */
  
