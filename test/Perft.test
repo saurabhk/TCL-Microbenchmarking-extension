@@ -1,7 +1,7 @@
 #
 #loading extension
 #
-package require Tcl 8.5
+
 load ./build/libperft.so
 
 #
@@ -237,5 +237,6 @@ eval $test5
 # running test 6
 #
 eval $test6
+
 
 

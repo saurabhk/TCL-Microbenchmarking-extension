@@ -47,4 +47,8 @@ others: Perft_common.h
 
 test: libperft
 	@tclsh8.5 ./test/Perft.test
+	@tclsh8.5 ./test/advanced/Cache.test
+	@tclsh8.5 ./test/advanced/Branch.test
+	@tclsh8.5 ./test/advanced/Sorting.test
+	@tclsh8.5 ./test/advanced/Flops.test
 
