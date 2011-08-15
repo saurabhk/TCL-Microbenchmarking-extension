@@ -1,0 +1,104 @@
+#
+# Testing Cache events
+#
+
+# load the extension
+load ./libPerft1.0.so
+
+# initialize event set
+perft::init [list PAPI_L1_DCM PAPI_L1_ICM PAPI_L2_DCM PAPI_L2_ICM  PAPI_TOT_INS]
+
+# take a large random list
+    set ls [list ]
+    for { set i 0 } { $i < 1000000 } { incr i } {
+        lappend ls [expr {rand()}]
+    }
+
+set script {
+# read elements randomly
+    for { set i 0 } { $i < 1000000 } { incr i } {
+        set temp [lindex $ls [expr {int(floor(rand() * 1000000)) }]]
+    }
+}
+puts "-----------------------------------"
+puts "Data Cache misses should decrease continuously, while total instructions and instruction cache misses should not ............"
+puts "-----------------------------------"
+set results [perft::run_script  $script]
+puts $results
+puts "-----------------------------------"
+
+
+
+# take a small random list
+    set ls [list ]
+    for { set i 0 } { $i < 100000 } { incr i } {
+        lappend ls [expr {rand()}]
+    }
+
+set script {
+# read elements randomly
+    for { set i 0 } { $i < 1000000 } { incr i } {
+        set temp [lindex $ls [expr {int(floor(rand() * 100000)) }]]
+    }
+}
+puts "-----------------------------------"
+set results [perft::run_script  $script]
+puts $results
+puts "-----------------------------------"
+
+
+# take a smaller random list
+
+    set ls [list ]
+    for { set i 0 } { $i < 10000 } { incr i } {
+        lappend ls [expr {rand()}]
+    }
+
+
+set script {
+# read elements randomly
+    for { set i 0 } { $i < 1000000 } { incr i } {
+        set temp [lindex $ls [expr {int(floor(rand() * 10000)) }]]
+    }
+}
+puts "-----------------------------------"
+set results [perft::run_script  $script]
+puts $results
+puts "-----------------------------------"
+
+# take an even smaller random list
+    set ls [list ]
+    for { set i 0 } { $i < 1000 } { incr i } {
+        lappend ls [expr {rand()}]
+    }
+
+set script {
+# read elements randomly
+    for { set i 0 } { $i < 1000000 } { incr i } {
+        set temp [lindex $ls [expr {int(floor(rand() * 1000)) }]]
+    }
+}
+puts "-----------------------------------"
+set results [perft::run_script  $script]
+puts $results
+puts "-----------------------------------"
+
+
+
+# take a very small random list
+    set ls [list ]
+    for { set i 0 } { $i < 100 } { incr i } {
+        lappend ls [expr {rand()}]
+    }
+
+set script {
+# read elements randomly
+    for { set i 0 } { $i < 1000000 } { incr i } {
+        set temp [lindex $ls [expr {int(floor(rand() * 100)) }]]
+
+    }
+}
+puts "-----------------------------------"
+set results [perft::run_script  $script]
+puts $results
+puts "-----------------------------------"

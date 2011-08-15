@@ -1,0 +1,44 @@
+'\"
+.so man.macros
+.TH perft n "Tcl Microbenchmarking Extensions"
+.HS perft tcl
+.BS
+'\" Note:  do not modify the .SH NAME line immediately below!
+.SH NAME
+perft ensemble \- get access to CPU Performance Counters
+.SH SYNOPSIS
+.sp
+\fBperft::select_events\fR 
+.br
+\fBperft::init\fR listOfEvents 
+.br
+\fBperft::run_script\fR script
+.br
+\fBperft::run_file\fR filename
+.br
+\fBperft::counters\fR
+.BE
+.SH DESCRIPTION
+.PP
+The group of commands can be used to access CPU perfrmance counter data for 
+different kind of events e.g. cache events, branch mispredictions etc.
+.PP
+\fBperft::select_events\fR provides with a GUI for selecting the set of events to be recorded during
+next run of \fBperft::run_script\fR or \fBperft::run_file\fR  commands.
+.PP
+\fBperft::init\fR is used to initialise the event set manually by explicitly providing a Tcl list of standard
+event names (\fBlistOfEvents\fR) as an argument.
+.PP
+\fBperft::run_script\fR is used after calling \fBperft::select_events\fR or \fBperft::init\fR to record the events
+for a tcl script (\fBscript\fR) passed as an argument.
+.PP
+\fBperft::run_file\fR is used after calling \fBperft::select_events\fR or \fBperft::init\fR to record the events
+for a tcl file whose name (\fBfilename\fR) is passed as an argument.
+.PP
+\fBperft::counters\fR returns the number of CPU performance counters present on a particular system.
+.PP
+For usage examples and other implementation details one should refer http://code.google.com/p/tcl/wiki/DesignDocument.
+'\" Local Variables:
+'\" mode: nroff
+'\" fill-column: 78
+'\" End:

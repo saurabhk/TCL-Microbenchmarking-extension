@@ -1,0 +1,68 @@
+#
+# Testing branch instructions
+#
+
+# load the extension
+load ./libPerft1.0.so
+
+# proc with more branches
+proc FuncWithBranches {diff}  {
+    if { $diff ==0} {
+        return 0
+    } elseif {$diff==1} {
+        return  1
+    } elseif {$diff==2} {
+        return  3
+    } elseif {$diff==3} {
+        return  3
+    } elseif {$diff==4} {
+        return  4
+    } elseif {$diff==5} {
+        return  5
+    } elseif {$diff==6} {
+        return  6
+    } elseif {$diff==7} {
+        return  7
+    } elseif {$diff==8} {
+        return  8
+    } elseif {$diff==9} {
+        return  9
+    } elseif {$diff==10} {
+        return  10
+    } elseif {$diff==11} {
+        return  11
+    } elseif {$diff==12} {
+        return  12
+    } else {
+        return  $diff
+    } 
+}
+
+# proc with less branches
+proc FuncWithOutBranches { diff } {
+    return  $diff
+}
+
+
+# initialize event set
+perft::init [list PAPI_BR_CN PAPI_BR_INS PAPI_TOT_INS ]
+ 
+set script1 "FuncWithBranches 13\n"
+set script1 [string repeat $script1 1000000]
+
+set script2 "FuncWithOutBranches 13\n"
+set script2 [string repeat $script2 1000000]
+
+
+puts "Branch instructions should decrease downward....."
+puts "-------------------------------"
+set results [perft::run_script  $script1]
+puts "Branch instructions ....... [expr [dict get $results PAPI_BR_INS]*100.0/[dict get $results PAPI_TOT_INS]]%"
+puts $results
+puts "-------------------------------"
+
+set results [perft::run_script  $script2]
+puts "Branch instructions ....... [expr [dict get $results PAPI_BR_INS]*100.0/[dict get $results PAPI_TOT_INS]]%"
+puts $results
+puts "-------------------------------"
+
