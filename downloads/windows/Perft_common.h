@@ -10,7 +10,7 @@
 
 using namespace std;
 
-#define PACKAGE_VERSION "1.1"
+#define PACKAGE_VERSION "1.0"
 #define PACKAGE_NAME "Perft"
 #define MAX_EVENTS 200
 #define MAX_STRING_LENGTH 3000

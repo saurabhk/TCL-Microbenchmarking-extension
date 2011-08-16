@@ -42,7 +42,7 @@ SelectEventsCmd(ClientData cdata, Tcl_Interp *interp, int objc, Tcl_Obj *const o
 		}
 	}
 	if(i>=NoOfLocations) {
-			fprintf(stderr,"Error running the widget. Set auto_path variable to include the Perft package directory \n");
+			fprintf(stderr,"Error running the widget. Set auto_path variable to include the Perft package directory. This error may also arise if path to PerfUtil.dll is  not set.\n");
 			return 1;
 		}	
 
