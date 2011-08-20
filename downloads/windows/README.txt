@@ -1,5 +1,5 @@
 Windows:
-	I) Install Microsoft Visual Studio or MIngW g++ (If necessary)
+	I) Install Microsoft Visual Studio or MingW g++ (If necessary)
 
 	II) Install perfinsp package (if necessary)
 		1) Go to http://http://perfinsp.sourceforge.net/install_windows.html
@@ -15,7 +15,7 @@ Windows:
 		1) Check TCLI (path to tcl.h)
 		2) Check TCLLIB (name of link option for Tcl stubs library [e.g. tcl85.lib in case you are using tcl8.5])
 		3) Check CXX (path to MingW C++)
-		4) Check TCLINTREP (tcl interpreter)
+		4) Check TCLINTERP (tcl interpreter)
 
 	IV) make (install make tool if not installed already)
 
@@ -24,7 +24,7 @@ Windows:
 
 	VI) Put the build files at appropriate locations
 		1) Create a directory Perft1.0 in your 'lib'/'library' directory inside the tcl installation directory [you may choose any other directory as per your convenience but you should change your auto_path variable accordingly.]
-		2) Copy Perft.dll, pkgIndex.tcl and PerftWidget.tcl to this directory
+		2) Copy /windows/Perft.dll, /windows/pkgIndex.tcl and /lib/PerftWidget.tcl to this directory
 	
 	VII)  use the extension by including the perft package in your scripts
 		e.g. you can add a line like
