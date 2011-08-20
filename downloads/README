@@ -46,7 +46,7 @@ Windows:
 		1) Check TCLI (path to tcl.h)
 		2) Check TCLLIB (name of link option for Tcl stubs library [e.g. tcl85.lib in case of tcl8.5])
 		3) Check CXX (path to MingW C++)
-		4) Check TCLINTREP (tcl interpreter)
+		4) Check TCLINTERP (tcl interpreter)
 
 	IV) make (install make tool if not installed already)
 
@@ -54,8 +54,8 @@ Windows:
 	    make test	
 
 	VI) Put the build files at appropriate locations
-		1) Create a directory Perft1.0 in your 'lib'/'library' directory inside the tcl installation directory [you may choose any other directory as per your convenience but you should change your auto_path variable accordingly.]
-		2) Copy Perft.dll, pkgIndex.tcl and PerftWidget.tcl to this directory
+		1) Create a directory Perft1.0 in your 'lib'or'library' directory inside the tcl installation directory [you may choose any other directory as per your convenience but you should change your auto_path variable accordingly.]
+		2) Copy /windows/Perft.dll, /windows/pkgIndex.tcl and /lib/PerftWidget.tcl to this directory
 	
 	VII)  use the extension by including the perft package in your scripts
 		e.g. you can add a line like
@@ -70,8 +70,8 @@ Usage:
        perft::run_file filename
        perft::counters
 
-       perft::select_events provides with a GUI for selecting the set of events  to
-       be  recorded  during  next run of perft::run_script or perft::run_file  com‐
+       perft::select_events provides with a GUI for selecting the set of events to
+       be recorded  during  next run of perft::run_script or perft::run_file com‐
        mands.
 
        perft::init is used to initialise the event set manually by explicitly  pro‐
@@ -80,17 +80,16 @@ Usage:
        perft::run_script  is used after calling perft::select_events or perft::init
        to record the events for a tcl script (script) passed as an argument.
 
-       perft::run_script is used after calling perft::select_events or  perft::init
+       perft::run_file is used after calling perft::select_events or  perft::init
        to  record  the  events for a tcl file whose name (filename) is passed as an
        argument.
 
-       perft::counters returns the number of CPU performance counters present on  a
+       perft::counters returns the number of CPU performance counters present on a
        particular system.
 
-       For  usage  examples  and  other  implementation  details  one  should refer
+       For  usage  examples  and  other  implementation details  one  should refer
        http://code.google.com/p/tcl/wiki/DesignDocument.
 
 
 Written by:  Saurabh Kumar (saurabh.catch@gmail.com)
 
-Use at your own risk.  No support. 
